@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test data with credentials
+# test-data/credentials.json
+
+# Test reports and artifacts
+reports/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Screenshots and videos
+screenshots/
+videos/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Playwright MCP
+.playwright-mcp/
+
+# Claude Code
+.claude/
+
+# Misc
+*.tmp
+*.temp

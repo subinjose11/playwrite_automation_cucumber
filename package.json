@@ -1,0 +1,26 @@
+{
+  "name": "spot-care-automation",
+  "version": "1.0.0",
+  "description": "Cucumber + Playwright automation framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --config config/cucumber.js",
+    "test:staging": "cucumber-js --config config/cucumber.staging.js",
+    "test:tags": "cucumber-js --config config/cucumber.js --tags",
+    "report": "open reports/cucumber-report.html"
+  },
+  "keywords": [
+    "cucumber",
+    "playwright",
+    "automation",
+    "testing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.3.1",
+    "@playwright/test": "^1.41.0",
+    "dotenv": "^16.4.1",
+    "mailslurp-client": "^15.19.1"
+  }
+}
