@@ -39,6 +39,8 @@ SLOW_MO=0
 DEFAULT_TIMEOUT=30000
 ```
 
+SMTP settings are only required in CI when you want the workflow to email the zipped report.
+
 ## Running Tests
 
 Run all tests:
@@ -60,6 +62,34 @@ Open HTML report:
 ```bash
 npm run report
 ```
+
+## CI Report Email
+
+The GitHub Actions workflow at `.github/workflows/ci.yml` can email the generated `reports/` directory as a zip attachment after every run.
+
+Configure these GitHub repository secrets:
+
+- `MAILSLURP_API_KEY`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `MAIL_FROM`
+- `MAIL_TO`
+
+Optional GitHub repository variable:
+
+- `MAIL_SUBJECT_PREFIX`
+
+The workflow will:
+
+- run the test suite
+- zip the full `reports/` directory
+- send the zip as an email attachment
+- upload the same report zip as a workflow artifact
+
+`MAIL_TO` should be a comma-separated list when you need multiple recipients.
 
 ## Project Structure
 
