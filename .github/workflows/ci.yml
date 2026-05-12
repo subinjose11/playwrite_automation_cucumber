@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
@@ -23,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
+      TEST_ENVIRONMENT: ${{ github.event.inputs.environment || 'staging' }}
+      REPORT_JSON_PATH: reports/cucumber-report.json
       REPORT_ZIP_PATH: reports/test-report-${{ github.run_id }}.zip
 
     steps:
@@ -51,7 +56,12 @@ jobs:
           BASE_URL: ${{ vars.BASE_URL || 'https://staging.spot.care/' }}
           HEADLESS: 'true'
           DEFAULT_TIMEOUT: '60000'
-        run: npm test
+        run: |
+          if [ "$TEST_ENVIRONMENT" = "staging" ]; then
+            npm run test:staging
+          else
+            npm test
+          fi
 
       - name: Create zipped report
         if: always()
@@ -76,6 +86,8 @@ jobs:
           MAIL_TO: ${{ secrets.MAIL_TO }}
           MAIL_SUBJECT_PREFIX: ${{ vars.MAIL_SUBJECT_PREFIX || 'Spot Care Automation' }}
           TEST_STATUS: ${{ steps.tests.outcome }}
+          TEST_ENVIRONMENT: ${{ env.TEST_ENVIRONMENT }}
+          REPORT_JSON_PATH: ${{ env.REPORT_JSON_PATH }}
         run: node scripts/send-report-email.js "$REPORT_ZIP_PATH"
 
       - name: Upload test artifacts
