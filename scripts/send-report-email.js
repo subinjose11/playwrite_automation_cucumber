@@ -201,18 +201,46 @@ function buildTextBody(summary, attachmentPath) {
   return lines.join('\n');
 }
 
-function buildMetricCard(label, value, accent) {
+function buildMetricCard(label, value, accent, background) {
   return `
-    <td style="padding:0 8px 12px 0;">
-      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="140" style="border-collapse:separate;border-spacing:0;background:#ffffff;border:1px solid #d9e2ec;border-radius:12px;">
+    <td style="padding:0 10px 12px 0;">
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="155" style="border-collapse:separate;border-spacing:0;background:${background};border:1px solid rgba(16,42,67,0.08);border-radius:18px;">
         <tr>
-          <td style="padding:16px 18px 8px 18px;font-family:Arial,sans-serif;font-size:12px;line-height:16px;color:#486581;text-transform:uppercase;letter-spacing:0.08em;">${escapeHtml(label)}</td>
+          <td style="padding:16px 18px 6px 18px;font-family:Arial,sans-serif;font-size:11px;line-height:15px;color:#486581;text-transform:uppercase;letter-spacing:0.12em;">${escapeHtml(label)}</td>
         </tr>
         <tr>
-          <td style="padding:0 18px 16px 18px;font-family:Arial,sans-serif;font-size:28px;line-height:32px;font-weight:700;color:${accent};">${escapeHtml(value)}</td>
+          <td style="padding:0 18px 18px 18px;font-family:Arial,sans-serif;font-size:34px;line-height:38px;font-weight:700;color:${accent};">${escapeHtml(value)}</td>
         </tr>
       </table>
     </td>
+  `;
+}
+
+function buildInfoRow(label, value) {
+  return `
+    <tr>
+      <td style="padding:0 0 10px 0;font-family:Arial,sans-serif;font-size:12px;line-height:18px;color:#829ab1;text-transform:uppercase;letter-spacing:0.08em;">${escapeHtml(label)}</td>
+      <td align="right" style="padding:0 0 10px 12px;font-family:Arial,sans-serif;font-size:15px;line-height:22px;color:#102a43;font-weight:700;">${escapeHtml(value)}</td>
+    </tr>
+  `;
+}
+
+function buildButton(url, label, dark) {
+  if (!url) {
+    return '';
+  }
+
+  const background = dark ? '#ffffff' : '#102a43';
+  const color = dark ? '#102a43' : '#ffffff';
+
+  return `
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:22px;">
+      <tr>
+        <td style="border-radius:999px;background:${background};">
+          <a href="${escapeHtml(url)}" style="display:inline-block;padding:14px 22px;font-family:Arial,sans-serif;font-size:14px;line-height:18px;font-weight:700;color:${color};text-decoration:none;">${escapeHtml(label)}</a>
+        </td>
+      </tr>
+    </table>
   `;
 }
 
@@ -223,21 +251,24 @@ function buildFailedScenarioRows(summary) {
 
   const rows = summary.failedScenarios.slice(0, 8).map((item) => `
     <tr>
-      <td style="padding:10px 14px;border-top:1px solid #e5e7eb;font-family:Arial,sans-serif;font-size:14px;line-height:20px;color:#102a43;">${escapeHtml(item.feature)}</td>
-      <td style="padding:10px 14px;border-top:1px solid #e5e7eb;font-family:Arial,sans-serif;font-size:14px;line-height:20px;color:#486581;">${escapeHtml(item.scenario)}</td>
+      <td style="padding:12px 16px;border-top:1px solid #f0d5d2;font-family:Arial,sans-serif;font-size:14px;line-height:20px;color:#102a43;">${escapeHtml(item.feature)}</td>
+      <td style="padding:12px 16px;border-top:1px solid #f0d5d2;font-family:Arial,sans-serif;font-size:14px;line-height:20px;color:#7b3131;">${escapeHtml(item.scenario)}</td>
     </tr>
   `).join('');
 
   return `
     <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;background:#ffffff;border:1px solid #d9e2ec;border-radius:12px;overflow:hidden;">
+      <td style="padding:0 34px 28px 34px;background:#ffffff;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;background:#fff7f7;border:1px solid #f0d5d2;border-radius:20px;overflow:hidden;">
           <tr>
-            <td colspan="2" style="padding:16px 14px;background:#fff4f4;font-family:Arial,sans-serif;font-size:16px;line-height:22px;font-weight:700;color:#9b1c1c;">Failed Scenarios</td>
+            <td colspan="2" style="padding:20px 16px 14px 16px;font-family:Arial,sans-serif;font-size:18px;line-height:24px;font-weight:700;color:#9b1c1c;">Attention Needed</td>
           </tr>
           <tr>
-            <td style="padding:12px 14px;font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:#486581;text-transform:uppercase;letter-spacing:0.06em;">Feature</td>
-            <td style="padding:12px 14px;font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:#486581;text-transform:uppercase;letter-spacing:0.06em;">Scenario</td>
+            <td colspan="2" style="padding:0 16px 14px 16px;font-family:Arial,sans-serif;font-size:14px;line-height:22px;color:#7b3131;">The following scenarios require review before sharing the run as complete.</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px;font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:#7b3131;text-transform:uppercase;letter-spacing:0.08em;">Feature</td>
+            <td style="padding:12px 16px;font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:#7b3131;text-transform:uppercase;letter-spacing:0.08em;">Scenario</td>
           </tr>
           ${rows}
         </table>
@@ -248,20 +279,27 @@ function buildFailedScenarioRows(summary) {
 
 function buildHtmlBody(summary, attachmentPath) {
   const status = (process.env.TEST_STATUS || 'unknown').toUpperCase();
-  const statusColor = status === 'SUCCESS' ? '#137333' : '#b42318';
+  const statusColor = status === 'SUCCESS' ? '#11643a' : '#b42318';
+  const statusBackground = status === 'SUCCESS' ? '#effcf6' : '#fff1f1';
+  const statusBorder = status === 'SUCCESS' ? '#b7ebc9' : '#f3c0c0';
   const archiveSize = formatBytes(fs.statSync(attachmentPath).size);
   const runUrl = getRunUrl();
   const commit = (process.env.GITHUB_SHA || 'N/A').slice(0, 7);
+  const subjectPrefix = process.env.MAIL_SUBJECT_PREFIX || 'Spot Care Automation';
+  const environment = process.env.TEST_ENVIRONMENT || 'default';
+  const introCopy = status === 'SUCCESS'
+    ? 'The latest automation cycle completed successfully. The zipped execution report is attached and ready to share with your client.'
+    : 'The latest automation cycle completed with issues. The zipped execution report is attached for review before client sharing.';
 
   const metrics = summary ? `
     <tr>
-      <td style="padding:0 32px 20px 32px;">
+      <td style="padding:0 34px 22px 34px;background:#ffffff;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
         <table role="presentation" cellspacing="0" cellpadding="0" border="0">
           <tr>
-            ${buildMetricCard('Passed', summary.passed, '#137333')}
-            ${buildMetricCard('Failed', summary.failed, '#b42318')}
-            ${buildMetricCard('Skipped', summary.skipped, '#9a6b16')}
-            ${buildMetricCard('Total', summary.total, '#102a43')}
+            ${buildMetricCard('Passed', summary.passed, '#11643a', '#edf9f0')}
+            ${buildMetricCard('Failed', summary.failed, '#b42318', '#fff3f2')}
+            ${buildMetricCard('Skipped', summary.skipped, '#9a6700', '#fff7e8')}
+            ${buildMetricCard('Total', summary.total, '#102a43', '#eff4f9')}
           </tr>
         </table>
       </td>
@@ -270,16 +308,19 @@ function buildHtmlBody(summary, attachmentPath) {
 
   const summaryPanel = summary ? `
     <tr>
-      <td style="padding:0 32px 24px 32px;">
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#ffffff;border:1px solid #d9e2ec;border-radius:12px;">
+      <td style="padding:0 34px 26px 34px;background:#ffffff;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#ffffff;border:1px solid #d9e2ec;border-radius:20px;">
           <tr>
-            <td style="padding:18px 20px 8px 20px;font-family:Arial,sans-serif;font-size:16px;line-height:22px;font-weight:700;color:#102a43;">Execution Summary</td>
+            <td style="padding:24px 24px 10px 24px;font-family:Arial,sans-serif;font-size:18px;line-height:24px;font-weight:700;color:#102a43;">Execution Summary</td>
           </tr>
           <tr>
-            <td style="padding:0 20px 18px 20px;font-family:Arial,sans-serif;font-size:14px;line-height:22px;color:#486581;">
-              Features: <strong style="color:#102a43;">${summary.features}</strong><br>
-              Duration: <strong style="color:#102a43;">${escapeHtml(formatDuration(summary.durationMs))}</strong><br>
-              Report archive: <strong style="color:#102a43;">${escapeHtml(path.basename(attachmentPath))}</strong> (${escapeHtml(archiveSize)})
+            <td style="padding:0 24px 24px 24px;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                ${buildInfoRow('Environment', environment)}
+                ${buildInfoRow('Features Covered', String(summary.features))}
+                ${buildInfoRow('Execution Time', formatDuration(summary.durationMs))}
+                ${buildInfoRow('Report Archive', `${path.basename(attachmentPath)} (${archiveSize})`)}
+              </table>
             </td>
           </tr>
         </table>
@@ -289,45 +330,109 @@ function buildHtmlBody(summary, attachmentPath) {
 
   return `<!DOCTYPE html>
 <html lang="en">
-  <body style="margin:0;padding:0;background:#f4f7fb;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f7fb;">
+  <body style="margin:0;padding:0;background:#edf2f7;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#edf2f7;">
       <tr>
         <td align="center" style="padding:32px 16px;">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="720" style="max-width:720px;width:100%;background:#f4f7fb;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="760" style="max-width:760px;width:100%;background:#edf2f7;">
             <tr>
-              <td style="padding-bottom:18px;font-family:Arial,sans-serif;font-size:13px;line-height:18px;color:#7b8794;">
-                ${escapeHtml(process.env.MAIL_SUBJECT_PREFIX || 'Spot Care Automation')}
+              <td style="padding:0 6px 18px 6px;font-family:Arial,sans-serif;font-size:13px;line-height:18px;color:#7b8794;">
+                ${escapeHtml(subjectPrefix)}
               </td>
             </tr>
             <tr>
-              <td style="background:#102a43;border-radius:18px 18px 0 0;padding:28px 32px;">
-                <div style="font-family:Arial,sans-serif;font-size:28px;line-height:34px;font-weight:700;color:#ffffff;">Automation Test Report</div>
-                <div style="padding-top:8px;font-family:Arial,sans-serif;font-size:15px;line-height:22px;color:#d9e2ec;">
-                  ${escapeHtml(process.env.GITHUB_REPOSITORY || 'Repository')} • ${escapeHtml(process.env.TEST_ENVIRONMENT || 'default')} environment
+              <td style="background:linear-gradient(135deg,#0f172a 0%,#16324f 55%,#1d4f73 100%);border-radius:28px 28px 0 0;padding:34px;">
+                <div style="display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.12);font-family:Arial,sans-serif;font-size:11px;line-height:15px;font-weight:700;letter-spacing:0.12em;color:#d9e2ec;text-transform:uppercase;">Client Delivery Summary</div>
+                <div style="padding-top:18px;font-family:Arial,sans-serif;font-size:36px;line-height:42px;font-weight:700;color:#ffffff;">Automation Report Ready</div>
+                <div style="padding-top:10px;max-width:560px;font-family:Arial,sans-serif;font-size:16px;line-height:26px;color:#dbe7f0;">
+                  ${escapeHtml(introCopy)}
                 </div>
+                ${buildButton(runUrl, 'View Workflow Run', true)}
               </td>
             </tr>
             <tr>
-              <td style="background:#ffffff;padding:24px 32px 18px 32px;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
-                <span style="display:inline-block;padding:7px 12px;border-radius:999px;background:#f0fdf4;border:1px solid #ccebd7;font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:${statusColor};">
-                  ${escapeHtml(status)}
-                </span>
-                <div style="padding-top:16px;font-family:Arial,sans-serif;font-size:15px;line-height:24px;color:#486581;">
-                  The automated regression run has completed successfully. The zipped report is attached for review.
-                </div>
+              <td style="background:#ffffff;padding:26px 34px 22px 34px;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td valign="middle">
+                      <span style="display:inline-block;padding:8px 14px;border-radius:999px;background:${statusBackground};border:1px solid ${statusBorder};font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:${statusColor};letter-spacing:0.08em;">
+                        ${escapeHtml(status)}
+                      </span>
+                    </td>
+                    <td align="right" valign="middle" style="font-family:Arial,sans-serif;font-size:14px;line-height:20px;color:#7b8794;">
+                      ${escapeHtml(process.env.GITHUB_REPOSITORY || 'Repository')}<br>
+                      <span style="color:#486581;">${escapeHtml(environment)} environment</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="background:#ffffff;padding:0 34px 18px 34px;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f8fbff;border:1px solid #d9e7f2;border-radius:20px;">
+                  <tr>
+                    <td style="padding:24px 24px 10px 24px;font-family:Arial,sans-serif;font-size:18px;line-height:24px;font-weight:700;color:#102a43;">At a Glance</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 24px 24px 24px;font-family:Arial,sans-serif;font-size:15px;line-height:24px;color:#486581;">
+                      This delivery includes the packaged HTML report, JSON output, and any captured evidence from the run. It is formatted for quick stakeholder review without digging through the CI pipeline first.
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="background:#ffffff;padding:0 34px 24px 34px;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td width="50%" valign="top" style="padding-right:10px;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#fffaf0;border:1px solid #f3e3b3;border-radius:20px;">
+                        <tr>
+                          <td style="padding:22px 24px 10px 24px;font-family:Arial,sans-serif;font-size:17px;line-height:22px;font-weight:700;color:#7c5d00;">Run Context</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 24px 22px 24px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                              ${buildInfoRow('Branch', process.env.GITHUB_REF_NAME || 'N/A')}
+                              ${buildInfoRow('Commit', commit)}
+                              ${buildInfoRow('Executed At', formatTimestamp())}
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td width="50%" valign="top" style="padding-left:10px;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f6fbf8;border:1px solid #d9eedd;border-radius:20px;">
+                        <tr>
+                          <td style="padding:22px 24px 10px 24px;font-family:Arial,sans-serif;font-size:17px;line-height:22px;font-weight:700;color:#11643a;">Delivered Files</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 24px 22px 24px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                              ${buildInfoRow('Attachment', path.basename(attachmentPath))}
+                              ${buildInfoRow('Archive Size', archiveSize)}
+                              ${buildInfoRow('Contents', 'HTML report, JSON, screenshots')}
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             ${metrics}
             ${summaryPanel}
             <tr>
-              <td style="padding:0 32px 24px 32px;background:#ffffff;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f8fafc;border:1px solid #d9e2ec;border-radius:12px;">
+              <td style="padding:0 34px 28px 34px;background:#ffffff;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f7f8fb;border:1px solid #d9e2ec;border-radius:20px;">
                   <tr>
-                    <td style="padding:18px 20px;font-family:Arial,sans-serif;font-size:14px;line-height:24px;color:#486581;">
-                      Branch: <strong style="color:#102a43;">${escapeHtml(process.env.GITHUB_REF_NAME || 'N/A')}</strong><br>
-                      Commit: <strong style="color:#102a43;">${escapeHtml(commit)}</strong><br>
-                      Executed at: <strong style="color:#102a43;">${escapeHtml(formatTimestamp())}</strong><br>
-                      ${runUrl ? `Workflow run: <a href="${escapeHtml(runUrl)}" style="color:#0b69ff;text-decoration:none;">Open in GitHub Actions</a>` : ''}
+                    <td style="padding:22px 24px 10px 24px;font-family:Arial,sans-serif;font-size:18px;line-height:24px;font-weight:700;color:#102a43;">Next Step</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 24px 24px 24px;font-family:Arial,sans-serif;font-size:15px;line-height:24px;color:#486581;">
+                      Review the attached report archive for detailed execution output, screenshots, and traceable evidence from this run.
+                      ${runUrl ? `<div style="padding-top:16px;">${buildButton(runUrl, 'Open GitHub Actions', false)}</div>` : ''}
                     </td>
                   </tr>
                 </table>
@@ -335,9 +440,9 @@ function buildHtmlBody(summary, attachmentPath) {
             </tr>
             ${buildFailedScenarioRows(summary)}
             <tr>
-              <td style="background:#ffffff;padding:0 32px 32px 32px;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;border-bottom:1px solid #d9e2ec;border-radius:0 0 18px 18px;">
-                <div style="font-family:Arial,sans-serif;font-size:13px;line-height:20px;color:#7b8794;">
-                  This message was generated automatically by the CI pipeline.
+              <td style="background:#ffffff;padding:0 34px 34px 34px;border-left:1px solid #d9e2ec;border-right:1px solid #d9e2ec;border-bottom:1px solid #d9e2ec;border-radius:0 0 28px 28px;">
+                <div style="padding-top:8px;border-top:1px solid #e6edf3;font-family:Arial,sans-serif;font-size:13px;line-height:21px;color:#7b8794;">
+                  This report was generated automatically by the delivery pipeline.
                 </div>
               </td>
             </tr>
