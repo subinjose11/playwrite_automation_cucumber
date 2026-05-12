@@ -9,6 +9,7 @@ Cucumber + Playwright automation framework for testing [staging.spot.care](https
 
 ## Installation
 
+
 1. Clone the repository:
 ```bash
 git clone <repository-url>
