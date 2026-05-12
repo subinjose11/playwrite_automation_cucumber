@@ -264,7 +264,7 @@ function buildFailedScenarioRows(summary) {
             <td colspan="2" style="padding:20px 16px 14px 16px;font-family:Arial,sans-serif;font-size:18px;line-height:24px;font-weight:700;color:#9b1c1c;">Attention Needed</td>
           </tr>
           <tr>
-            <td colspan="2" style="padding:0 16px 14px 16px;font-family:Arial,sans-serif;font-size:14px;line-height:22px;color:#7b3131;">The following scenarios require review before sharing the run as complete.</td>
+            <td colspan="2" style="padding:0 16px 14px 16px;font-family:Arial,sans-serif;font-size:14px;line-height:22px;color:#7b3131;">The following scenarios require review before considering the run complete.</td>
           </tr>
           <tr>
             <td style="padding:12px 16px;font-family:Arial,sans-serif;font-size:12px;line-height:16px;font-weight:700;color:#7b3131;text-transform:uppercase;letter-spacing:0.08em;">Feature</td>
@@ -288,8 +288,8 @@ function buildHtmlBody(summary, attachmentPath) {
   const subjectPrefix = process.env.MAIL_SUBJECT_PREFIX || 'Spot Care Automation';
   const environment = process.env.TEST_ENVIRONMENT || 'default';
   const introCopy = status === 'SUCCESS'
-    ? 'The latest automation cycle completed successfully. The zipped execution report is attached and ready to share with your client.'
-    : 'The latest automation cycle completed with issues. The zipped execution report is attached for review before client sharing.';
+    ? 'The latest automation run completed successfully. The zipped execution report is attached for review.'
+    : 'The latest automation run completed with issues. The zipped execution report is attached for review.';
 
   const metrics = summary ? `
     <tr>
@@ -342,7 +342,7 @@ function buildHtmlBody(summary, attachmentPath) {
             </tr>
             <tr>
               <td style="background:linear-gradient(135deg,#0f172a 0%,#16324f 55%,#1d4f73 100%);border-radius:28px 28px 0 0;padding:34px;">
-                <div style="display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.12);font-family:Arial,sans-serif;font-size:11px;line-height:15px;font-weight:700;letter-spacing:0.12em;color:#d9e2ec;text-transform:uppercase;">Client Delivery Summary</div>
+                <div style="display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.12);font-family:Arial,sans-serif;font-size:11px;line-height:15px;font-weight:700;letter-spacing:0.12em;color:#d9e2ec;text-transform:uppercase;">Execution Summary</div>
                 <div style="padding-top:18px;font-family:Arial,sans-serif;font-size:36px;line-height:42px;font-weight:700;color:#ffffff;">Automation Report Ready</div>
                 <div style="padding-top:10px;max-width:560px;font-family:Arial,sans-serif;font-size:16px;line-height:26px;color:#dbe7f0;">
                   ${escapeHtml(introCopy)}
@@ -375,7 +375,7 @@ function buildHtmlBody(summary, attachmentPath) {
                   </tr>
                   <tr>
                     <td style="padding:0 24px 24px 24px;font-family:Arial,sans-serif;font-size:15px;line-height:24px;color:#486581;">
-                      This delivery includes the packaged HTML report, JSON output, and any captured evidence from the run. It is formatted for quick stakeholder review without digging through the CI pipeline first.
+                      This report includes the packaged HTML report, JSON output, and any captured evidence from the run. It is formatted for quick review without digging through the CI pipeline first.
                     </td>
                   </tr>
                 </table>
